@@ -2,6 +2,7 @@ package com.example.holyquran.Utils;
 
 import android.util.Log;
 
+import com.example.holyquran.Activities.ResultActivity;
 import com.example.holyquran.Quran;
 
 import org.json.JSONArray;
@@ -14,17 +15,21 @@ import java.util.List;
 public class NetworkRequest {
     private static final String TAG = "NetworkRequest";
 
-
     public static List<Quran> getVersesListByChapter(String JSON){
         List<Quran> list=new ArrayList<>();
 
-        int size=0;
+
         StringBuilder verseTranslation,arabic;
         try {
             JSONObject rootObject=new JSONObject(JSON);
-            size=rootObject.getJSONObject("pagination").getInt("per_page");
+
+            ResultActivity.TOTAL_RECORDS =rootObject.getJSONObject("pagination").getInt("total_pages");
+            ResultActivity.CURRENT_PAGE=rootObject.getJSONObject("pagination").getInt("current_page");
+            ResultActivity.hasNext=rootObject.getJSONObject("pagination").getString("next_page");
+
+            System.out.println(ResultActivity.hasNext);
             JSONArray verses=rootObject.getJSONArray("verses");
-            for(int i=0;i<size;i++){
+            for(int i=0;i<verses.length();i++){
                 verseTranslation=new StringBuilder();
                 arabic=new StringBuilder();
                 JSONObject currentVerse=verses.getJSONObject(i);
@@ -40,10 +45,8 @@ public class NetworkRequest {
 
                 list.add(new Quran(arabic.toString(),verseTranslation.toString(),null,null));
             }
-            Log.d(TAG, size+"");
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.d(TAG, size+"");
         }
 
         return list;

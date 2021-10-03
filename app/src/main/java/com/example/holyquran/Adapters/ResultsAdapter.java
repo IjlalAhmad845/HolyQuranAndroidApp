@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.holyquran.Activities.ResultActivity;
 import com.example.holyquran.Quran;
 import com.example.holyquran.R;
 
@@ -36,7 +37,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        holder.textView.setText(position+1+")");
+        holder.textView.setText(50*(ResultActivity.CURRENT_PAGE-1)+(position+1)+")");
         holder.verse.setText(list.get(position).getTranslation());
         holder.arabic.setText(list.get(position).getArabic());
     }

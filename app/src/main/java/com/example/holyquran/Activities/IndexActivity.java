@@ -178,10 +178,13 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
         switch (type){
             case "Chapters":
                 intent.putExtra("URLType",ByChapter);
+                break;
             case "Pages":
                 intent.putExtra("URLType",ByPages);
+                break;
             case "Juz":
                 intent.putExtra("URLType",ByJuz);
+                break;
         }
         intent.putExtra("BASEUrl",BASE_URL);
 

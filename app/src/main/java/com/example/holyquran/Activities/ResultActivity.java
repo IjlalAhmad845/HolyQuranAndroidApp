@@ -31,12 +31,16 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
     RecyclerView recyclerView;
     ResultsAdapter resultsAdapter;
     ProgressBar progressBar;
-    TextView networkTextView;
+    TextView networkTextView,pagesTextView;
 
     List<Quran> list = new ArrayList<>();
     //urdu-158,eng-167,spanish-83,french-136,persian-135
-    //String url = "https://api.quran.com/api/v4/verses/by_chapter/?language=en&words=true&translations=167&page=1&per_page=50";
+
     String url;
+
+    public static int TOTAL_RECORDS=0;
+    public static int CURRENT_PAGE=0;
+    public static String hasNext=null,hasPrev=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +50,10 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
         recyclerView = findViewById(R.id.recyclerView);
         progressBar = findViewById(R.id.results_progressBar);
         networkTextView=findViewById(R.id.result_network_message);
+        pagesTextView=findViewById(R.id.pages_textview);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-
 
         resultsAdapter = new ResultsAdapter(this, list);
         recyclerView.setAdapter(resultsAdapter);
@@ -70,12 +74,34 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
         System.out.println(url);
         getSupportLoaderManager().initLoader(RESULT_LOADER_ID, null, this).forceLoad();
     }
+
+    public void NextPage(View v){
+        if(CURRENT_PAGE<TOTAL_RECORDS){
+            CURRENT_PAGE++;
+
+            url=url.substring(0,url.indexOf("&page=")+6)+CURRENT_PAGE+url.substring(url.indexOf("&per_page"));
+            getSupportLoaderManager().restartLoader(RESULT_LOADER_ID, null, this).forceLoad();
+        }
+    }
+
+    public void PrevPage(View v){
+        if(CURRENT_PAGE>1){
+            CURRENT_PAGE--;
+            url=url.substring(0,url.indexOf("&page=")+6)+CURRENT_PAGE+url.substring(url.indexOf("&per_page"));
+            getSupportLoaderManager().restartLoader(RESULT_LOADER_ID, null, this).forceLoad();
+        }
+    }
     /**
      * ======================================= LOADER FUNCTIONS ===========================================
      **/
     @NonNull
     @Override
     public Loader<List<Quran>> onCreateLoader(int id, @Nullable Bundle args) {
+
+        progressBar.setVisibility(View.VISIBLE);
+        networkTextView.setVisibility(View.VISIBLE);
+        list.clear();
+        resultsAdapter.notifyDataSetChanged();
 
         if (id == RESULT_LOADER_ID)
             return new ApiLoader(this, url, id);
@@ -96,8 +122,11 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
 
         if(!isConnected)
             networkTextView.setText("No Internet Available");
-        else
+        else{
             networkTextView.setVisibility(View.GONE);
+            pagesTextView.setText(CURRENT_PAGE+"/"+TOTAL_RECORDS);
+        }
+
         progressBar.setVisibility(View.GONE);
 
         progressBar.setVisibility(View.GONE);
