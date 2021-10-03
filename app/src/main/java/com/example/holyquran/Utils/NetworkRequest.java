@@ -15,7 +15,7 @@ public class NetworkRequest {
     private static final String TAG = "NetworkRequest";
 
 
-    public static List<Quran> getVersesListFromJSON(String JSON){
+    public static List<Quran> getVersesListByChapter(String JSON){
         List<Quran> list=new ArrayList<>();
 
         int size=0;
@@ -38,7 +38,7 @@ public class NetworkRequest {
                     }
                 }
 
-                list.add(new Quran(arabic.toString(),verseTranslation.toString()));
+                list.add(new Quran(arabic.toString(),verseTranslation.toString(),null,null));
             }
             Log.d(TAG, size+"");
         } catch (JSONException e) {
@@ -50,6 +50,11 @@ public class NetworkRequest {
     }
 
 
+    public static List<Quran> getVersesListByPages(String JSON){
+        List<Quran> list=new ArrayList<>();
+
+        return list;
+    }
     public static List<Quran> getChaptersFromJSON(String JSON){
         List<Quran> list=new ArrayList<>();
 
@@ -59,7 +64,8 @@ public class NetworkRequest {
             JSONArray chaptersArray=rootObject.getJSONArray("chapters");
 
             for(int i=0;i<chaptersArray.length();i++)
-                list.add(new Quran(chaptersArray.getJSONObject(i).getString("name_complex")+"\t("+chaptersArray.getJSONObject(i).getJSONObject("translated_name").getString("name")+")"));
+                list.add(new Quran(null,null,chaptersArray.getJSONObject(i).getString("name_complex")+
+                        "\t("+chaptersArray.getJSONObject(i).getJSONObject("translated_name").getString("name")+")",null));
 
             System.out.println(list);
         } catch (JSONException e) {

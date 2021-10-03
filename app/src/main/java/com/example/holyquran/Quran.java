@@ -3,23 +3,30 @@ package com.example.holyquran;
 public class Quran {
     String Arabic;
     String Translation;
-    String Chapter;
+    String ByChapter;
+    String ByPages;
 
-    public Quran(String arabic, String translation) {
+    public Quran(String arabic, String translation, String byChapter, String byPages) {
         Arabic = arabic;
         Translation = translation;
+        ByChapter = byChapter;
+        ByPages = byPages;
     }
 
-    public Quran(String chapters) {
-        Chapter = chapters;
+    public String getByPages() {
+        return ByPages;
     }
 
-    public String getChapter() {
-        return Chapter;
+    public void setByPages(String byPages) {
+        ByPages = byPages;
     }
 
-    public void setChapter(String chapter) {
-        Chapter = chapter;
+    public String getByChapter() {
+        return ByChapter;
+    }
+
+    public void setByChapter(String byChapter) {
+        ByChapter = byChapter;
     }
 
     public String getArabic() {

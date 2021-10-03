@@ -18,6 +18,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:text="index"
+        android:layout_gravity="center|top"
          />
 
     <TextView

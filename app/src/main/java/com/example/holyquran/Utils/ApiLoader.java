@@ -84,7 +84,7 @@ public class ApiLoader extends AsyncTaskLoader<List<Quran>> {
         }
 
        if(loaderID== ResultActivity.RESULT_LOADER_ID)
-        list = NetworkRequest.getVersesListFromJSON(JSONResponse.toString());
+        list = NetworkRequest.getVersesListByChapter(JSONResponse.toString());
        else if(loaderID== IndexActivity.INDEX_LOADER_ID)
            list = NetworkRequest.getChaptersFromJSON(JSONResponse.toString());
         return list;

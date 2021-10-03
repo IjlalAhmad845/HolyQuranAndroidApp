@@ -32,8 +32,13 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
     IndexAdapter indexAdapter;
     ProgressBar progressBar;
 
-    public static String ChaptersURL="https://api.quran.com/api/v4/chapters?language=en\n";
-    public static String PagesURL="https://api.quran.com/api/v4/verses/by_page/1?language=en&words=true&page=1&per_page=10\n";
+    //urdu-158,eng-167,spanish-83,french-136,persian-135
+    public static final String BASE_URL="https://api.quran.com/api/v4/verses/?language=en&words=true&translations=167&page=1&per_page=50";
+    public static String ChaptersURL="https://api.quran.com/api/v4/chapters?language=en";
+
+    public static String ByChapter="by_chapter/";
+    public static String ByPages="by_page/";
+    public static String ByJuz="by_juz/";
 
     List<String> chaptersList=new ArrayList<>();
     List<String> pagesList=new ArrayList<>();
@@ -134,7 +139,9 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
     @Override
     public Loader<List<Quran>> onCreateLoader(int id, @Nullable Bundle args) {
         if(id==INDEX_LOADER_ID)
-        return new ApiLoader(this,ChaptersURL,id);
+            return new ApiLoader(this,ChaptersURL,id);
+
+
         else return new ApiLoader(this,"",0);
     }
 
@@ -143,7 +150,7 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
         indexList.clear();
 
         for(int i=0;i<data.size();i++)
-            indexList.add(data.get(i).getChapter());
+            indexList.add(data.get(i).getByChapter());
 
         indexAdapter.notifyDataSetChanged();
 
@@ -167,7 +174,17 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
     @Override
     public void onClick(int position) {
         Intent intent=new Intent(IndexActivity.this,ResultActivity.class);
-        intent.putExtra("ChapterNumber",position+1+"");
+        intent.putExtra("ListPosition",position+1+"");
+        switch (type){
+            case "Chapters":
+                intent.putExtra("URLType",ByChapter);
+            case "Pages":
+                intent.putExtra("URLType",ByPages);
+            case "Juz":
+                intent.putExtra("URLType",ByJuz);
+        }
+        intent.putExtra("BASEUrl",BASE_URL);
+
         startActivity(intent);
     }
 }

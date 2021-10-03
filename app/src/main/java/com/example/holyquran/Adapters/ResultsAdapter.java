@@ -36,7 +36,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        holder.textView.setText(position+1+"");
+        holder.textView.setText(position+1+")");
         holder.verse.setText(list.get(position).getTranslation());
         holder.arabic.setText(list.get(position).getArabic());
     }
