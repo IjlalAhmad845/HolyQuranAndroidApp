@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +31,8 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
     RecyclerView recyclerView;
     ResultsAdapter resultsAdapter;
     ProgressBar progressBar;
+    TextView networkTextView;
+
     List<Quran> list = new ArrayList<>();
     //urdu-158,eng-167,spanish-83,french-136,persian-135
     String url = "https://api.quran.com/api/v4/verses/by_chapter/?language=en&words=true&translations=167&page=1&per_page=50";
@@ -41,6 +44,7 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
 
         recyclerView = findViewById(R.id.recyclerView);
         progressBar = findViewById(R.id.results_progressBar);
+        networkTextView=findViewById(R.id.result_network_message);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -82,6 +86,12 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
         ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
+        if(!isConnected)
+            networkTextView.setText("No Internet Available");
+        else
+            networkTextView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
 
         progressBar.setVisibility(View.GONE);
     }
