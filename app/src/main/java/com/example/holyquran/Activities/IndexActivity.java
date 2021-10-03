@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.holyquran.Adapters.IndexAdapter;
 import com.example.holyquran.R;
+import com.example.holyquran.Utils.NetworkRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,6 +107,17 @@ public class IndexActivity extends AppCompatActivity {
             indexList.clear();
             for(int i=1;i<=604;i++)
                 indexList.add("Page No. - "+i);
+
+            indexAdapter.notifyDataSetChanged();
+
+            networkTextView.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+        }
+
+        else if(type.equals("Chapters")){
+            indexList.clear();
+
+            indexList.addAll(NetworkRequest.getChaptersFromJSON());
 
             indexAdapter.notifyDataSetChanged();
 
