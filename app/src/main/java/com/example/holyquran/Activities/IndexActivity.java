@@ -1,32 +1,39 @@
 package com.example.holyquran.Activities;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.holyquran.Adapters.IndexAdapter;
+import com.example.holyquran.Quran;
 import com.example.holyquran.R;
-import com.example.holyquran.Utils.NetworkRequest;
+import com.example.holyquran.Utils.ApiLoader;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class IndexActivity extends AppCompatActivity {
+public class IndexActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Quran>> {
 
     TextView headerTextView,networkTextView;
     RecyclerView recyclerView;
     IndexAdapter indexAdapter;
     ProgressBar progressBar;
 
-    String ChaptersURL="https://api.quran.com/api/v4/chapters?language=en\n";
-    String PagesURL="https://api.quran.com/api/v4/verses/by_page/1?language=en&words=true&page=1&per_page=10\n";
+    public static String ChaptersURL="https://api.quran.com/api/v4/chapters?language=en\n";
+    public static String PagesURL="https://api.quran.com/api/v4/verses/by_page/1?language=en&words=true&page=1&per_page=10\n";
 
     List<String> chaptersList=new ArrayList<>();
     List<String> pagesList=new ArrayList<>();
@@ -34,6 +41,8 @@ public class IndexActivity extends AppCompatActivity {
     List<String> hizbList=new ArrayList<>();
 
     List<String> indexList=new ArrayList<>();
+
+    public static final int INDEX_LOADER_ID=100;
 
     public static String type;
     @Override
@@ -115,14 +124,42 @@ public class IndexActivity extends AppCompatActivity {
         }
 
         else if(type.equals("Chapters")){
-            indexList.clear();
-
-            indexList.addAll(NetworkRequest.getChaptersFromJSON());
-
-            indexAdapter.notifyDataSetChanged();
-
-            networkTextView.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
+            getSupportLoaderManager().initLoader(INDEX_LOADER_ID,null,this).forceLoad();
         }
+    }
+
+    /**================================================================================================**/
+    @NonNull
+    @Override
+    public Loader<List<Quran>> onCreateLoader(int id, @Nullable Bundle args) {
+        if(id==INDEX_LOADER_ID)
+        return new ApiLoader(this,ChaptersURL,id);
+        else return new ApiLoader(this,"",0);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<List<Quran>> loader, List<Quran> data) {
+        indexList.clear();
+
+        for(int i=0;i<data.size();i++)
+            indexList.add(data.get(i).getChapter());
+
+        indexAdapter.notifyDataSetChanged();
+
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
+        if(!isConnected)
+            networkTextView.setText("No Internet Available");
+        else
+            networkTextView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<List<Quran>> loader) {
+            indexAdapter=new IndexAdapter(this,new ArrayList<>());
     }
 }

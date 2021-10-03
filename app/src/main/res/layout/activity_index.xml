@@ -42,7 +42,7 @@
             android:id="@+id/index_network_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Message" />
+            android:text="Fetching Data from Server" />
 
         <ProgressBar
             android:id="@+id/index_progressBar"

@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.loader.content.AsyncTaskLoader;
 
+import com.example.holyquran.Activities.IndexActivity;
+import com.example.holyquran.Activities.ResultActivity;
 import com.example.holyquran.Quran;
 
 import java.io.BufferedReader;
@@ -22,18 +24,18 @@ import java.util.List;
 public class ApiLoader extends AsyncTaskLoader<List<Quran>> {
     private static final String TAG = "ApiLoader";
     String URL;
+    int loaderID;
 
     public ApiLoader(@NonNull Context context, String url, int id) {
         super(context);
         this.URL = url;
+        this.loaderID=id;
     }
 
     @Nullable
     @Override
     public List<Quran> loadInBackground() {
-        List<Quran> list;
-        System.out.println("hello");
-
+        List<Quran> list=null;
 
         URL url = null;
         StringBuilder JSONResponse = new StringBuilder();
@@ -81,8 +83,10 @@ public class ApiLoader extends AsyncTaskLoader<List<Quran>> {
             }
         }
 
-        //Log.d(TAG, "loadInBackground: "+JSONResponse.toString());
+       if(loaderID== ResultActivity.RESULT_LOADER_ID)
         list = NetworkRequest.getVersesListFromJSON(JSONResponse.toString());
+       else if(loaderID== IndexActivity.INDEX_LOADER_ID)
+           list = NetworkRequest.getChaptersFromJSON(JSONResponse.toString());
         return list;
     }
 }
