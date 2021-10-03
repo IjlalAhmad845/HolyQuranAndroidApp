@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="cardViewsStyle">
+    <style name="HomePageCardsStyle">
         <item name="android:layout_height">140dp</item>
         <item name="android:layout_width">140dp</item>
         <item name="cardElevation">10dp</item>
         <item name="cardCornerRadius">10dp</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
         <item name="android:clickable">true</item>
+    </style>
+
+    <style name="ListCardsStyle">
+        <item name="cardElevation">8dp</item>
+        <item name="cardCornerRadius">5dp</item>
+        <item name="android:layout_margin">8dp</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+
     </style>
 </resources>
