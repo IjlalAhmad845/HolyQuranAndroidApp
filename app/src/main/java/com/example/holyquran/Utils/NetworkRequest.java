@@ -13,11 +13,10 @@ import java.util.List;
 
 public class NetworkRequest {
     private static final String TAG = "NetworkRequest";
-    static List<Quran> list=new ArrayList<>();
 
-    static String JSONQuery;
 
-    public static List<Quran> getListFromJSON(String JSON){
+    public static List<Quran> getVersesListFromJSON(String JSON){
+        List<Quran> list=new ArrayList<>();
 
         int size=0;
         StringBuilder verseTranslation,arabic;
@@ -49,4 +48,5 @@ public class NetworkRequest {
 
         return list;
     }
+
 }

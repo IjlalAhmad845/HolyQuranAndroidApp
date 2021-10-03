@@ -33,6 +33,8 @@ public class IndexActivity extends AppCompatActivity {
     List<String> hizbList=new ArrayList<>();
 
     List<String> indexList=new ArrayList<>();
+
+    public static String type;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,50 +58,59 @@ public class IndexActivity extends AppCompatActivity {
     }
 
     public void initData(Intent intent){
-        String value=intent.getStringExtra(MainActivity.INDEX_KEYS);
-        headerTextView.setText(value);
+        type=intent.getStringExtra(MainActivity.INDEX_KEYS);
+        headerTextView.setText(type);
 
 
-        if(value.equals("Juz")){
+        if(type.equals("Juz")){
             indexList.clear();
 
-            juzList.add("Alīf-Lām-Mīm");
-            juzList.add("Sayaqūlu");
-            juzList.add("Tilka ’r-Rusulu");
-            juzList.add("Lan tanaloo albirra");
-            juzList.add("Wa’l-muḥṣanātu");
-            juzList.add("Lā yuḥibbu-’llāhu");
-            juzList.add("Wa ’Idha Samiʿū");
-            juzList.add("Wa-law annanā");
-            juzList.add("Qāla ’l-mala’u");
-            juzList.add("Wa-’aʿlamū");
-            juzList.add("Yaʿtazerūn");
-            juzList.add("Wa mā min dābbatin");
-            juzList.add("Wa mā ubarri’u");
-            juzList.add("Alīf-Lām-Rā’/Rubamā");
-            juzList.add("Subḥāna ’lladhī");
-            juzList.add("Qāla ’alam");
-            juzList.add("Iqtaraba li’n-nāsi");
-            juzList.add("Qad ’aflaḥa");
-            juzList.add("Wa-qāla ’lladhīna");
-            juzList.add("’A’man Khalaqa");
-            juzList.add("Otlu ma oohiya");
-            juzList.add("Wa-man yaqnut");
-            juzList.add("Wa-Mali");
-            juzList.add("Fa-man ’aẓlamu");
-            juzList.add("Ilayhi yuraddu");
-            juzList.add("Ḥā’ Mīm");
-            juzList.add("Qāla fa-mā khaṭbukum");
-            juzList.add("Qad samiʿa ’llāhu");
-            juzList.add("Tabāraka ’lladhī");
-            juzList.add("‘Amma");
+            indexList.add("Alīf-Lām-Mīm");
+            indexList.add("Sayaqūlu");
+            indexList.add("Tilka ’r-Rusulu");
+            indexList.add("Lan tanaloo albirra");
+            indexList.add("Wa’l-muḥṣanātu");
+            indexList.add("Lā yuḥibbu-’llāhu");
+            indexList.add("Wa ’Idha Samiʿū");
+            indexList.add("Wa-law annanā");
+            indexList.add("Qāla ’l-mala’u");
+            indexList.add("Wa-’aʿlamū");
+            indexList.add("Yaʿtazerūn");
+            indexList.add("Wa mā min dābbatin");
+            indexList.add("Wa mā ubarri’u");
+            indexList.add("Alīf-Lām-Rā’/Rubamā");
+            indexList.add("Subḥāna ’lladhī");
+            indexList.add("Qāla ’alam");
+            indexList.add("Iqtaraba li’n-nāsi");
+            indexList.add("Qad ’aflaḥa");
+            indexList.add("Wa-qāla ’lladhīna");
+            indexList.add("’A’man Khalaqa");
+            indexList.add("Otlu ma oohiya");
+            indexList.add("Wa-man yaqnut");
+            indexList.add("Wa-Mali");
+            indexList.add("Fa-man ’aẓlamu");
+            indexList.add("Ilayhi yuraddu");
+            indexList.add("Ḥā’ Mīm");
+            indexList.add("Qāla fa-mā khaṭbukum");
+            indexList.add("Qad samiʿa ’llāhu");
+            indexList.add("Tabāraka ’lladhī");
+            indexList.add("‘Amma");
 
-            indexList.addAll(juzList);
             indexAdapter.notifyDataSetChanged();
 
             networkTextView.setVisibility(View.GONE);
             progressBar.setVisibility(View.GONE);
 
+        }
+        else if(type.equals("Pages")){
+            indexList.clear();
+            for(int i=1;i<=604;i++)
+                indexList.add("Page No. - "+i);
+
+            indexAdapter.notifyDataSetChanged();
+
+            networkTextView.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
         }
     }
 }

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.holyquran.Activities.IndexActivity;
 import com.example.holyquran.R;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.List;
 public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.ViewHolder> {
 
     Context mContext;
-    List<String> list=new ArrayList<>();
+    public static List<String> list=new ArrayList<>();
 
     public IndexAdapter(Context mContext, List<String> list) {
         this.mContext = mContext;
@@ -52,6 +53,10 @@ public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.ViewHolder> 
 
             index=itemView.findViewById(R.id.index);
             indexListTextView=itemView.findViewById(R.id.indexListTextView);
+
+            if(IndexActivity.type.equals("Pages"))
+                index.setVisibility(View.GONE);
+            else index.setVisibility(View.VISIBLE);
         }
     }
 }

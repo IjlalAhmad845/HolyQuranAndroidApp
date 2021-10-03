@@ -61,7 +61,7 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     public Loader<List<Quran>> onCreateLoader(int id, @Nullable Bundle args) {
 
-        return new ApiLoader(this,url);
+        return new ApiLoader(this,url,2);
     }
 
     @Override

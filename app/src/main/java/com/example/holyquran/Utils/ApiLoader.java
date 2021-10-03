@@ -1,8 +1,6 @@
 package com.example.holyquran.Utils;
 
 import android.content.Context;
-import android.util.Log;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,9 +23,9 @@ public class ApiLoader extends AsyncTaskLoader<List<Quran>> {
     private static final String TAG = "ApiLoader";
     String URL;
 
-    public ApiLoader(@NonNull Context context, String url) {
+    public ApiLoader(@NonNull Context context, String url, int id) {
         super(context);
-        this.URL=url;
+        this.URL = url;
     }
 
     @Nullable
@@ -84,7 +82,7 @@ public class ApiLoader extends AsyncTaskLoader<List<Quran>> {
         }
 
         //Log.d(TAG, "loadInBackground: "+JSONResponse.toString());
-        list=NetworkRequest.getListFromJSON(JSONResponse.toString());
+        list = NetworkRequest.getVersesListFromJSON(JSONResponse.toString());
         return list;
     }
 }
