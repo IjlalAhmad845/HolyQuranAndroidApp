@@ -25,9 +25,7 @@ public class NetworkRequest {
 
             ResultActivity.TOTAL_RECORDS =rootObject.getJSONObject("pagination").getInt("total_pages");
             ResultActivity.CURRENT_PAGE=rootObject.getJSONObject("pagination").getInt("current_page");
-            ResultActivity.hasNext=rootObject.getJSONObject("pagination").getString("next_page");
 
-            System.out.println(ResultActivity.hasNext);
             JSONArray verses=rootObject.getJSONArray("verses");
             for(int i=0;i<verses.length();i++){
                 verseTranslation=new StringBuilder();

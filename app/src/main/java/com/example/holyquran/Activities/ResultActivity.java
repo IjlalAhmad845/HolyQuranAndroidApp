@@ -5,7 +5,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,24 +26,27 @@ import com.example.holyquran.R;
 import com.example.holyquran.Utils.ApiLoader;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class ResultActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Quran>> {
+public class ResultActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Quran>>, AdapterView.OnItemSelectedListener {
 
     public static final int RESULT_LOADER_ID = 101;
     RecyclerView recyclerView;
     ResultsAdapter resultsAdapter;
     ProgressBar progressBar;
     TextView networkTextView,pagesTextView;
+    Spinner spinner;
 
     List<Quran> list = new ArrayList<>();
     //urdu-158,eng-167,spanish-83,french-136,persian-135
+    HashMap<String,Integer> hashMap=new HashMap<>();
+    String[] languages=new String[]{"English","Urdu","Hindi","Persian","Spanish","Italian","Russian","French"};
 
     String url;
 
     public static int TOTAL_RECORDS=0;
     public static int CURRENT_PAGE=0;
-    public static String hasNext=null,hasPrev=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +67,8 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
 
         Intent intent=getIntent();
         URLBuilder(intent);
+
+        setSpinner();
     }
 
     public void URLBuilder(Intent intent){
@@ -91,6 +99,39 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
             getSupportLoaderManager().restartLoader(RESULT_LOADER_ID, null, this).forceLoad();
         }
     }
+
+    public void setSpinner() {
+
+       hashMap.put(languages[0],167);//English
+        hashMap.put(languages[1],158);//urdu
+        hashMap.put(languages[2],0);//hindi
+        hashMap.put(languages[3],135);//persian
+        hashMap.put(languages[4],83);//spanish
+        hashMap.put(languages[5],0);//italian
+        hashMap.put(languages[6],0);//russian
+        hashMap.put(languages[7],136);//french
+
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,languages);
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(this);
+    }
+
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        url=url.substring(0,url.indexOf("translations")+13)+hashMap.get(languages[position])+url.substring(url.indexOf("&page"));
+        getSupportLoaderManager().restartLoader(RESULT_LOADER_ID, null, this).forceLoad();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
     /**
      * ======================================= LOADER FUNCTIONS ===========================================
      **/
