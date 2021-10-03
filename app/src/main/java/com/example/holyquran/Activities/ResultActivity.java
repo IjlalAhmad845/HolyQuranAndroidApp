@@ -1,5 +1,6 @@
 package com.example.holyquran.Activities;
 
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -31,7 +32,7 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
     ProgressBar progressBar;
     List<Quran> list = new ArrayList<>();
     //urdu-158,eng-167,spanish-83,french-136,persian-135
-    String url = "https://api.quran.com/api/v4/verses/by_chapter/2?language=en&words=true&translations=167&page=1&per_page=50";
+    String url = "https://api.quran.com/api/v4/verses/by_chapter/?language=en&words=true&translations=167&page=1&per_page=50";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +50,15 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
         recyclerView.setAdapter(resultsAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        getSupportLoaderManager().initLoader(RESULT_LOADER_ID, null, this).forceLoad();
-
+        Intent intent=getIntent();
+        URLBuilder(intent);
     }
 
+    public void URLBuilder(Intent intent){
+        url=url.substring(0,url.indexOf("?"))+intent.getStringExtra("ChapterNumber")+url.substring(url.indexOf("?"));
+
+        getSupportLoaderManager().initLoader(RESULT_LOADER_ID, null, this).forceLoad();
+    }
     /**
      * ======================================= LOADER FUNCTIONS ===========================================
      **/

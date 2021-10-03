@@ -25,7 +25,7 @@ import com.example.holyquran.Utils.ApiLoader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IndexActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Quran>> {
+public class IndexActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Quran>>,IndexAdapter.indexItemOnClick {
 
     TextView headerTextView,networkTextView;
     RecyclerView recyclerView;
@@ -56,7 +56,7 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
         progressBar=findViewById(R.id.index_progressBar);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        indexAdapter=new IndexAdapter(this,indexList);
+        indexAdapter=new IndexAdapter(this,indexList,this);
         recyclerView.setAdapter(indexAdapter);
 
         recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
@@ -72,59 +72,60 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
         headerTextView.setText(type);
 
 
-        if(type.equals("Juz")){
-            indexList.clear();
+        switch (type) {
+            case "Juz":
+                indexList.clear();
 
-            indexList.add("Alīf-Lām-Mīm");
-            indexList.add("Sayaqūlu");
-            indexList.add("Tilka ’r-Rusulu");
-            indexList.add("Lan tanaloo albirra");
-            indexList.add("Wa’l-muḥṣanātu");
-            indexList.add("Lā yuḥibbu-’llāhu");
-            indexList.add("Wa ’Idha Samiʿū");
-            indexList.add("Wa-law annanā");
-            indexList.add("Qāla ’l-mala’u");
-            indexList.add("Wa-’aʿlamū");
-            indexList.add("Yaʿtazerūn");
-            indexList.add("Wa mā min dābbatin");
-            indexList.add("Wa mā ubarri’u");
-            indexList.add("Alīf-Lām-Rā’/Rubamā");
-            indexList.add("Subḥāna ’lladhī");
-            indexList.add("Qāla ’alam");
-            indexList.add("Iqtaraba li’n-nāsi");
-            indexList.add("Qad ’aflaḥa");
-            indexList.add("Wa-qāla ’lladhīna");
-            indexList.add("’A’man Khalaqa");
-            indexList.add("Otlu ma oohiya");
-            indexList.add("Wa-man yaqnut");
-            indexList.add("Wa-Mali");
-            indexList.add("Fa-man ’aẓlamu");
-            indexList.add("Ilayhi yuraddu");
-            indexList.add("Ḥā’ Mīm");
-            indexList.add("Qāla fa-mā khaṭbukum");
-            indexList.add("Qad samiʿa ’llāhu");
-            indexList.add("Tabāraka ’lladhī");
-            indexList.add("‘Amma");
+                indexList.add("Alīf-Lām-Mīm");
+                indexList.add("Sayaqūlu");
+                indexList.add("Tilka ’r-Rusulu");
+                indexList.add("Lan tanaloo albirra");
+                indexList.add("Wa’l-muḥṣanātu");
+                indexList.add("Lā yuḥibbu-’llāhu");
+                indexList.add("Wa ’Idha Samiʿū");
+                indexList.add("Wa-law annanā");
+                indexList.add("Qāla ’l-mala’u");
+                indexList.add("Wa-’aʿlamū");
+                indexList.add("Yaʿtazerūn");
+                indexList.add("Wa mā min dābbatin");
+                indexList.add("Wa mā ubarri’u");
+                indexList.add("Alīf-Lām-Rā’/Rubamā");
+                indexList.add("Subḥāna ’lladhī");
+                indexList.add("Qāla ’alam");
+                indexList.add("Iqtaraba li’n-nāsi");
+                indexList.add("Qad ’aflaḥa");
+                indexList.add("Wa-qāla ’lladhīna");
+                indexList.add("’A’man Khalaqa");
+                indexList.add("Otlu ma oohiya");
+                indexList.add("Wa-man yaqnut");
+                indexList.add("Wa-Mali");
+                indexList.add("Fa-man ’aẓlamu");
+                indexList.add("Ilayhi yuraddu");
+                indexList.add("Ḥā’ Mīm");
+                indexList.add("Qāla fa-mā khaṭbukum");
+                indexList.add("Qad samiʿa ’llāhu");
+                indexList.add("Tabāraka ’lladhī");
+                indexList.add("‘Amma");
 
-            indexAdapter.notifyDataSetChanged();
+                indexAdapter.notifyDataSetChanged();
 
-            networkTextView.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
+                networkTextView.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
 
-        }
-        else if(type.equals("Pages")){
-            indexList.clear();
-            for(int i=1;i<=604;i++)
-                indexList.add("Page No. - "+i);
+                break;
+            case "Pages":
+                indexList.clear();
+                for (int i = 1; i <= 604; i++)
+                    indexList.add("Page No. - " + i);
 
-            indexAdapter.notifyDataSetChanged();
+                indexAdapter.notifyDataSetChanged();
 
-            networkTextView.setVisibility(View.GONE);
-            progressBar.setVisibility(View.GONE);
-        }
-
-        else if(type.equals("Chapters")){
-            getSupportLoaderManager().initLoader(INDEX_LOADER_ID,null,this).forceLoad();
+                networkTextView.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
+                break;
+            case "Chapters":
+                getSupportLoaderManager().initLoader(INDEX_LOADER_ID, null, this).forceLoad();
+                break;
         }
     }
 
@@ -160,6 +161,13 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
 
     @Override
     public void onLoaderReset(@NonNull Loader<List<Quran>> loader) {
-            indexAdapter=new IndexAdapter(this,new ArrayList<>());
+            indexAdapter=new IndexAdapter(this,new ArrayList<>(),this);
+    }
+
+    @Override
+    public void onClick(int position) {
+        Intent intent=new Intent(IndexActivity.this,ResultActivity.class);
+        intent.putExtra("ChapterNumber",position+1+"");
+        startActivity(intent);
     }
 }

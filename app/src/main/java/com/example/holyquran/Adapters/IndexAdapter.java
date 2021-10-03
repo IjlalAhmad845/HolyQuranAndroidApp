@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.holyquran.Activities.IndexActivity;
@@ -15,14 +16,21 @@ import com.example.holyquran.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.ViewHolder> {
+public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.ViewHolder>{
+
+    public interface indexItemOnClick {
+        void onClick(int position);
+    }
+
+    static public indexItemOnClick indexItemOnClick;
 
     Context mContext;
     public static List<String> list=new ArrayList<>();
 
-    public IndexAdapter(Context mContext, List<String> list) {
+    public IndexAdapter(Context mContext, List<String> list,indexItemOnClick indexItemOnClick) {
         this.mContext = mContext;
         this.list = list;
+        IndexAdapter.indexItemOnClick =indexItemOnClick;
     }
 
     @NonNull
@@ -48,12 +56,20 @@ public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.ViewHolder> 
 
         TextView indexListTextView;
         TextView index;
+        CardView listCardView;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             index=itemView.findViewById(R.id.index);
             indexListTextView=itemView.findViewById(R.id.indexListTextView);
+            listCardView=itemView.findViewById(R.id.listCardView);
 
+            listCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    IndexAdapter.indexItemOnClick.onClick(getAdapterPosition());
+                }
+            });
             if(IndexActivity.type.equals("Pages"))
                 index.setVisibility(View.GONE);
             else index.setVisibility(View.VISIBLE);
