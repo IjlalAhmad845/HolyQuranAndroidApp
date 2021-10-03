@@ -40,7 +40,7 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
         setContentView(R.layout.activity_results);
 
         recyclerView=findViewById(R.id.recyclerView);
-        progressBar=findViewById(R.id.progressBar);
+        progressBar=findViewById(R.id.results_progressBar);
 
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);

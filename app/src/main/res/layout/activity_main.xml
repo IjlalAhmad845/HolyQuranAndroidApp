@@ -48,7 +48,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chapter"
+            android:text="Chapters"
             android:textStyle="bold"
             android:textAllCaps="true"
             android:layout_gravity="center|bottom"/>
@@ -73,7 +73,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Juz"
+            android:text="Juz(s)"
             android:textStyle="bold"
             android:textAllCaps="true"
             android:layout_gravity="center|bottom"/>
@@ -97,7 +97,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hizb"
+            android:text="Hizb(s)"
             android:textStyle="bold"
             android:textAllCaps="true"
             android:layout_gravity="center|bottom"/>
@@ -121,7 +121,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Page"
+            android:text="Pages"
             android:textStyle="bold"
             android:textAllCaps="true"
             android:layout_gravity="center|bottom"/>
