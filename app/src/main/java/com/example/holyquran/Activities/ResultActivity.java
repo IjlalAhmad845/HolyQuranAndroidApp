@@ -95,11 +95,16 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
         //extracting URL Type
         String TYPE=intent.getStringExtra("URLType");
 
-        //Building URL based Upon type and Position Clicked
+        if(TYPE.equals("Chapters") || TYPE.equals("Pages") ||TYPE.equals("Juz") )
+        //Building URL based Upon type and Position Clicked in Chapter,Page and Juz MODE
         url=url.substring(0,url.indexOf("verses")+7)+TYPE+intent.getStringExtra("ListPosition")+url.substring(url.indexOf("?"));
 
+        else
+            url=url.substring(0,url.indexOf("verses")+7)+TYPE+intent.getStringExtra("ListPosition")+":"+
+                    intent.getStringExtra("ListClickedValue")+url.substring(url.indexOf("?"),url.length()-19);
+
         System.out.println(url);
-        getSupportLoaderManager().initLoader(RESULT_LOADER_ID, null, this).forceLoad();
+        //getSupportLoaderManager().initLoader(RESULT_LOADER_ID, null, this).forceLoad();
     }
 
     public void NextPage(View v){

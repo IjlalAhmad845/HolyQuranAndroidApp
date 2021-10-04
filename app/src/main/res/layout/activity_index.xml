@@ -93,6 +93,13 @@
                 android:foreground="?attr/selectableItemBackground"/>
         </LinearLayout>
 
+        <Button
+            android:id="@+id/get_verse_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get"
+            android:layout_margin="4dp"
+            android:backgroundTint="@color/cardview_dark_background"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

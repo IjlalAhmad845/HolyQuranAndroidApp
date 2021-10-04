@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -30,7 +31,9 @@ import com.example.holyquran.Utils.ApiLoader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IndexActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Quran>>,IndexAdapter.indexItemOnClick, AdapterView.OnItemSelectedListener {
+public class IndexActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Quran>>,IndexAdapter.indexItemOnClick,
+        AdapterView.OnItemSelectedListener,
+        View.OnClickListener {
 
     TextView headerTextView,networkTextView;
     RecyclerView recyclerView;
@@ -41,6 +44,7 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
     LinearLayout specificVerseLayout;
     Spinner chapterSpinner,verseSpinner;
     RadioButton nameRadio, numberRadio;
+    Button getVerseButton;
 
 
 
@@ -50,6 +54,7 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
     public static String ByChapter="by_chapter/";
     public static String ByPages="by_page/";
     public static String ByJuz="by_juz/";
+    public static String ByKey="by_key/";
 
 
     //All in one list for incoming data
@@ -58,7 +63,7 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
     //for specific verse type MODE
     String[] chapterSpinnerList,verseSpinnerList;
     int chapterSpinnerIndex=0,verseSpinnerIndex=0;
-    public static int[] versesCount=new int[114];
+    public static int[] versesCount;
 
 
     public static final int INDEX_LOADER_ID=100;
@@ -81,6 +86,7 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
         nameRadio =findViewById(R.id.by_name_radio);
         numberRadio =findViewById(R.id.by_number_radio);
         nameRadio.setChecked(true);
+        getVerseButton=findViewById(R.id.get_verse_button);
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -175,36 +181,38 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
         specificVerseLayout.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
 
-        nameRadio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //recursion for resetting spinner
-                specificVerseMode();
-            }
-        });
-
-
-        numberRadio.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(numberRadio.isChecked()){
-                    for(int i=0;i<indexList.size();i++)
-                        chapterSpinnerList[i]="Chapter (Surah) - "+(i+1);
-
-                    ArrayAdapter<String> adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1,chapterSpinnerList);
-                    chapterSpinner.setAdapter(adapter);
-
-                    chapterSpinner.setSelection(chapterSpinnerIndex);
-                }
-            }
-        });
+        nameRadio.setOnClickListener(this);
+        numberRadio.setOnClickListener(this);
+        getVerseButton.setOnClickListener(this);
 
         getSupportLoaderManager().initLoader(INDEX_LOADER_ID, null, this).forceLoad();
 
         chapterSpinner.setOnItemSelectedListener(this);
+        verseSpinner.setOnItemSelectedListener(this);
 
     }
 
+
+
+    @Override
+    public void onClick(View v) {
+
+        if(v==nameRadio){
+            //recursion for resetting spinner
+            specificVerseMode();
+        }
+        else if(v==numberRadio){
+            for(int i=0;i<indexList.size();i++)
+                chapterSpinnerList[i]="Chapter (Surah) - "+(i+1);
+
+            ArrayAdapter<String> adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1,chapterSpinnerList);
+            chapterSpinner.setAdapter(adapter);
+
+            chapterSpinner.setSelection(chapterSpinnerIndex);
+        }
+        else if(v==getVerseButton)
+        onClick(chapterSpinnerIndex,String.valueOf(verseSpinnerIndex+1));
+    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -212,10 +220,20 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
         if(parent==chapterSpinner)
         {
             chapterSpinnerIndex=position;
+
+            verseSpinnerList=new String[versesCount[position]];
+              for(int i=0;i<versesCount[position];i++)
+                verseSpinnerList[i]=String.valueOf(i+1);
+
+            ArrayAdapter<String> verseSpinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,verseSpinnerList);
+            verseSpinner.setAdapter(verseSpinnerAdapter);
+
         }
         else if(parent==verseSpinner)
         {
             verseSpinnerIndex=position;
+
+
         }
     }
 
@@ -228,6 +246,8 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
     @NonNull
     @Override
     public Loader<List<Quran>> onCreateLoader(int id, @Nullable Bundle args) {
+        verseByTypeMode();
+
         if(id==INDEX_LOADER_ID)
             return new ApiLoader(this,ChaptersURL,id);
 
@@ -237,12 +257,17 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
 
     @Override
     public void onLoadFinished(@NonNull Loader<List<Quran>> loader, List<Quran> data) {
+        specificVerseLayout.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+
         indexList.clear();
         chapterSpinnerList=new String[data.size()];
+        versesCount=new int[data.size()];
 
         for(int i=0;i<data.size();i++){
             indexList.add(data.get(i).getByChapter());
             chapterSpinnerList[i]=data.get(i).getByChapter();
+            versesCount[i]=data.get(i).getVerseCount();
         }
 
         indexAdapter.notifyDataSetChanged();
@@ -264,11 +289,23 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
         progressBar.setVisibility(View.GONE);
 
 
-        //for Specific Verse type MODE
-        ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,chapterSpinnerList);
-        chapterSpinner.setAdapter(adapter);
+        /*for Specific Verse type MODE*/
+        //for ChapterSelector Spinner
+        ArrayAdapter<String> chapterSpinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,chapterSpinnerList);
+        chapterSpinner.setAdapter(chapterSpinnerAdapter);
 
         chapterSpinner.setSelection(chapterSpinnerIndex);
+
+
+        //for verseSelector Spinner
+        verseSpinnerList=new String[versesCount[chapterSpinnerIndex]];
+        for(int i=0;i<versesCount[chapterSpinnerIndex];i++)
+            verseSpinnerList[i]=String.valueOf(i+1);
+
+        ArrayAdapter<String> verseSpinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,verseSpinnerList);
+        verseSpinner.setAdapter(verseSpinnerAdapter);
+
+        verseSpinner.setSelection(verseSpinnerIndex);
 
     }
 
@@ -293,6 +330,9 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
                 break;
             case "Juz":
                 intent.putExtra("URLType",ByJuz);
+                break;
+            case "Specific Verse":
+                intent.putExtra("URLType",ByKey);
                 break;
         }
         intent.putExtra("BASEUrl",BASE_URL);

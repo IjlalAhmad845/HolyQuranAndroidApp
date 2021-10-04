@@ -47,10 +47,10 @@ public class NetworkRequest {
 
                 if(language.equals("122") && verseTranslation.toString().contains("<")){
                     language=fixHindiTranslation(verseTranslation.toString());
-                    list.add(new Quran(arabic.toString(),language,null,null));
+                    list.add(new Quran(arabic.toString(),language,null,null,0));
                 }
                 else
-                list.add(new Quran(arabic.toString(),verseTranslation.toString(),null,null));
+                list.add(new Quran(arabic.toString(),verseTranslation.toString(),null,null,0));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -67,13 +67,12 @@ public class NetworkRequest {
 
             JSONArray chaptersArray=rootObject.getJSONArray("chapters");
 
-
+            int verseCount=0;
             for(int i=0;i<chaptersArray.length();i++)
             {
+                verseCount=chaptersArray.getJSONObject(i).getInt("verses_count");
                 list.add(new Quran(null,null,chaptersArray.getJSONObject(i).getString("name_complex")+
-                        "\t("+chaptersArray.getJSONObject(i).getJSONObject("translated_name").getString("name")+")",null));
-
-                IndexActivity.versesCount[i]= Integer.parseInt(chaptersArray.getJSONObject(i).getString("verses_count"));
+                        "\t("+chaptersArray.getJSONObject(i).getJSONObject("translated_name").getString("name")+")",null,verseCount));
             }
 
             System.out.println(list);
