@@ -6,4 +6,119 @@
     android:layout_height="match_parent"
     tools:context=".SpecificVerseActivity">
 
+    <TextView
+        android:id="@+id/specific_verse_heading"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="TextView"
+        android:textAllCaps="true"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <LinearLayout
+        android:id="@+id/specific_verse_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/specific_verse_heading"
+        android:baselineAligned="false"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Chapter"
+                android:padding="8dp"
+                android:textSize="16sp" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="8dp">
+
+                <RadioButton
+                    android:id="@+id/by_name_radio"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="By Name" />
+
+                <RadioButton
+                    android:id="@+id/by_number_radio"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="By Number"
+                    android:layout_weight="1"/>
+
+            </RadioGroup>
+
+            <Spinner
+                android:id="@+id/chapter_selector_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:foreground="?attr/selectableItemBackground"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Verse number"
+                android:padding="8dp"
+                android:textSize="16sp"/>
+
+            <Spinner
+                android:id="@+id/verse_selector_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackground"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/get_verse_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get"
+            android:layout_margin="4dp"
+            android:backgroundTint="@color/cardview_dark_background"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/specific_verse_network_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fetching Data from Server"
+        app:layout_constraintBottom_toTopOf="@+id/specific_verse_progressBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/specific_verse_progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

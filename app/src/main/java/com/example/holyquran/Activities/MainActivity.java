@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.holyquran.R;
+import com.example.holyquran.SpecificVerseActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void specificVerseButton(View v){
-        Intent intent=new Intent(MainActivity.this,IndexActivity.class);
+        Intent intent=new Intent(MainActivity.this, SpecificVerseActivity.class);
         intent.putExtra(INDEX_KEYS,this.getResources().getString(R.string.SpecificVerse));
         startActivity(intent);
     }
