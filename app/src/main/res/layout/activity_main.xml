@@ -11,7 +11,7 @@
         android:id="@+id/imageView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/quran_clipart"
+        android:src="@drawable/quran_clip_art"
         app:layout_constraintHeight_min="200dp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,9 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Chapters"
-            android:textStyle="bold"
-            android:textAllCaps="true"
-            android:layout_gravity="center|bottom"/>
+            style="@style/mainActivityCardLabelsStyle"/>
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -74,9 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Juz(s)"
-            android:textStyle="bold"
-            android:textAllCaps="true"
-            android:layout_gravity="center|bottom"/>
+            style="@style/mainActivityCardLabelsStyle"/>
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -89,15 +85,15 @@
 
         <ImageView
             android:id="@+id/imageView6"
-            android:layout_width="100dp"
+            android:layout_width="120dp"
             android:layout_height="100dp"
             android:layout_gravity="center|top"
-            android:src="@drawable/hizb_clip_art" />
+            android:src="@drawable/verse_by_key" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hizb(s)"
+            android:text="Specific verse"
             android:textStyle="bold"
             android:textAllCaps="true"
             android:layout_gravity="center|bottom"/>
@@ -122,9 +118,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Pages"
-            android:textStyle="bold"
-            android:textAllCaps="true"
-            android:layout_gravity="center|bottom"/>
+            style="@style/mainActivityCardLabelsStyle"/>
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
