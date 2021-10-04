@@ -6,15 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".Activities.IndexActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/index_recyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/IndexHeading" />
-
     <TextView
         android:id="@+id/IndexHeading"
         android:layout_width="0dp"
@@ -28,28 +19,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@+id/index_recyclerView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/index_recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/IndexHeading" />
 
-        <TextView
-            android:id="@+id/index_network_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fetching Data from Server" />
+    <TextView
+        android:id="@+id/index_network_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fetching Data from Server"
+        app:layout_constraintBottom_toTopOf="@+id/index_progressBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <ProgressBar
-            android:id="@+id/index_progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
-    </LinearLayout>
+    <ProgressBar
+        android:id="@+id/index_progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

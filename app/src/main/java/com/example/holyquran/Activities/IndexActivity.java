@@ -32,7 +32,7 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
     IndexAdapter indexAdapter;
     ProgressBar progressBar;
 
-    //urdu-158,eng-167,spanish-83,french-136,persian-135
+
     public static final String BASE_URL="https://api.quran.com/api/v4/verses/?language=en&words=true&translations=167&page=1&per_page=50";
     public static String ChaptersURL="https://api.quran.com/api/v4/chapters?language=en";
 
@@ -40,10 +40,6 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
     public static String ByPages="by_page/";
     public static String ByJuz="by_juz/";
 
-    List<String> chaptersList=new ArrayList<>();
-    List<String> pagesList=new ArrayList<>();
-    List<String> juzList=new ArrayList<>();
-    List<String> hizbList=new ArrayList<>();
 
     List<String> indexList=new ArrayList<>();
 
@@ -131,10 +127,14 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
             case "Chapters":
                 getSupportLoaderManager().initLoader(INDEX_LOADER_ID, null, this).forceLoad();
                 break;
+
+            case "Specific Verse":
+
+                break;
         }
     }
 
-    /**================================================================================================**/
+    /**=========================================== LOADER METHODS =====================================================**/
     @NonNull
     @Override
     public Loader<List<Quran>> onCreateLoader(int id, @Nullable Bundle args) {
@@ -171,6 +171,7 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
             indexAdapter=new IndexAdapter(this,new ArrayList<>(),this);
     }
 
+    /**==================================================== ONCLICK =========================================================**/
     @Override
     public void onClick(int position,String listClickedValue) {
 
@@ -190,7 +191,10 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
         }
         intent.putExtra("BASEUrl",BASE_URL);
         intent.putExtra("ListClickedValue",listClickedValue);
+        intent.putExtra("AdapterClickedIndex",String.valueOf(position+1));
 
         startActivity(intent);
     }
+
+
 }

@@ -68,21 +68,22 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
 
+        Intent intent=getIntent();
+        typeTextView.setText(intent.getStringExtra("AdapterClickedIndex"));
         //conditions for settings type text view for Content Range
         switch (IndexActivity.type){
             case "Chapters":
-                typeTextView.setText("1-114");
+                typeTextView.append("-114");
 
                 break;
             case "Pages":
-                typeTextView.setText("1-604");
+                typeTextView.append("-604");
                 break;
             case "Juz":
-                typeTextView.setText("1-30");
+                typeTextView.append("-30");
                 break;
         }
 
-        Intent intent=getIntent();
         headerTextView.setText(intent.getStringExtra("ListClickedValue"));
         URLBuilder(intent);
 

@@ -23,25 +23,25 @@ public class MainActivity extends AppCompatActivity {
 
     public void chapterButton(View v){
         Intent intent=new Intent(MainActivity.this,IndexActivity.class);
-        intent.putExtra(INDEX_KEYS,"Chapters");
+        intent.putExtra(INDEX_KEYS,this.getResources().getString(R.string.Chapters));
         startActivity(intent);
     }
 
     public void pageButton(View v){
         Intent intent=new Intent(MainActivity.this,IndexActivity.class);
-        intent.putExtra(INDEX_KEYS,"Pages");
+        intent.putExtra(INDEX_KEYS,this.getResources().getString(R.string.Pages));
         startActivity(intent);
     }
 
     public void juzButton(View v){
         Intent intent=new Intent(MainActivity.this,IndexActivity.class);
-        intent.putExtra(INDEX_KEYS,"Juz");
+        intent.putExtra(INDEX_KEYS,this.getResources().getString(R.string.Juz));
         startActivity(intent);
     }
 
-    public void hizbButton(View v){
+    public void specificVerseButton(View v){
         Intent intent=new Intent(MainActivity.this,IndexActivity.class);
-        intent.putExtra(INDEX_KEYS,"Hizb");
+        intent.putExtra(INDEX_KEYS,this.getResources().getString(R.string.SpecificVerse));
         startActivity(intent);
     }
 }

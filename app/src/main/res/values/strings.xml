@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Holy Quran</string>
+
+    <string name="Chapters">Chapters</string>
+    <string name="Pages">Pages</string>
+    <string name="Juz">Juz</string>
+    <string name="SpecificVerse">Specific Verse</string>
+
+    <string name="the_holy_quran">the holy quran</string>
 </resources>
