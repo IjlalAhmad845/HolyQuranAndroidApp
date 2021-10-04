@@ -1,6 +1,7 @@
 package com.example.holyquran.Utils;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.holyquran.Activities.ResultActivity;
 import com.example.holyquran.Quran;
@@ -41,6 +42,13 @@ public class NetworkRequest {
                     }
                 }
 
+                String language=currentVerse.getJSONArray("translations").getJSONObject(0).getString("resource_id");
+
+                if(language.equals("122") && verseTranslation.toString().contains("<")){
+                    language=fixHindiTranslation(verseTranslation.toString());
+                    list.add(new Quran(arabic.toString(),language,null,null));
+                }
+                else
                 list.add(new Quran(arabic.toString(),verseTranslation.toString(),null,null));
             }
         } catch (JSONException e) {
@@ -74,5 +82,9 @@ public class NetworkRequest {
         }
 
         return list;
+    }
+
+    public static String fixHindiTranslation(String translation){
+        return translation.substring(0,translation.indexOf("<"))+translation.substring(translation.lastIndexOf(">")+1);
     }
 }

@@ -40,7 +40,7 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
 
     List<Quran> list = new ArrayList<>();
     //urdu-158,eng-167,spanish-83,french-136,persian-135
-    HashMap<String,Integer> hashMap=new HashMap<>();
+    public static HashMap<String,Integer> hashMap=new HashMap<>();
     String[] languages=new String[]{"English","Urdu","Hindi","Persian","Spanish","Italian","Russian","French"};
 
     String url;
@@ -120,14 +120,14 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
 
     public void setSpinner() {
 
-       hashMap.put(languages[0],167);//English
-        hashMap.put(languages[1],158);//urdu
-        hashMap.put(languages[2],0);//hindi
+       hashMap.put(languages[0],84);//English
+        hashMap.put(languages[1],234);//urdu
+        hashMap.put(languages[2],122);//hindi
         hashMap.put(languages[3],135);//persian
-        hashMap.put(languages[4],83);//spanish
-        hashMap.put(languages[5],0);//italian
-        hashMap.put(languages[6],0);//russian
-        hashMap.put(languages[7],136);//french
+        hashMap.put(languages[4],28);//spanish
+        hashMap.put(languages[5],209);//italian
+        hashMap.put(languages[6],79);//russian
+        hashMap.put(languages[7],31);//french
 
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
