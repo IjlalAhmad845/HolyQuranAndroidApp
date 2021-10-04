@@ -35,7 +35,7 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
     RecyclerView recyclerView;
     ResultsAdapter resultsAdapter;
     ProgressBar progressBar;
-    TextView networkTextView,pagesTextView;
+    TextView networkTextView,pagesTextView,headerTextView,typeTextView;
     Spinner spinner;
 
     List<Quran> list = new ArrayList<>();
@@ -57,6 +57,8 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
         progressBar = findViewById(R.id.results_progressBar);
         networkTextView=findViewById(R.id.result_network_message);
         pagesTextView=findViewById(R.id.pages_textview);
+        headerTextView=findViewById(R.id.header_text_view);
+        typeTextView=findViewById(R.id.type_text_view);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -65,7 +67,23 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
         recyclerView.setAdapter(resultsAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
+
+        //conditions for settings type text view for Content Range
+        switch (IndexActivity.type){
+            case "Chapters":
+                typeTextView.setText("1-114");
+
+                break;
+            case "Pages":
+                typeTextView.setText("1-604");
+                break;
+            case "Juz":
+                typeTextView.setText("1-30");
+                break;
+        }
+
         Intent intent=getIntent();
+        headerTextView.setText(intent.getStringExtra("ListClickedValue"));
         URLBuilder(intent);
 
         setSpinner();

@@ -172,7 +172,9 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
     }
 
     @Override
-    public void onClick(int position) {
+    public void onClick(int position,String listClickedValue) {
+
+        //created new intent to start results activity by clinked value
         Intent intent=new Intent(IndexActivity.this,ResultActivity.class);
         intent.putExtra("ListPosition",position+1+"");
         switch (type){
@@ -187,6 +189,7 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
                 break;
         }
         intent.putExtra("BASEUrl",BASE_URL);
+        intent.putExtra("ListClickedValue",listClickedValue);
 
         startActivity(intent);
     }

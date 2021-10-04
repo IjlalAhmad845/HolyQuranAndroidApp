@@ -19,7 +19,7 @@ import java.util.List;
 public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.ViewHolder>{
 
     public interface indexItemOnClick {
-        void onClick(int position);
+        void onClick(int position,String listClickedValue);
     }
 
     static public indexItemOnClick indexItemOnClick;
@@ -67,7 +67,7 @@ public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.ViewHolder>{
             listCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    IndexAdapter.indexItemOnClick.onClick(getAdapterPosition());
+                    IndexAdapter.indexItemOnClick.onClick(getAdapterPosition(),list.get(getAdapterPosition()));
                 }
             });
             if(IndexActivity.type.equals("Pages"))
