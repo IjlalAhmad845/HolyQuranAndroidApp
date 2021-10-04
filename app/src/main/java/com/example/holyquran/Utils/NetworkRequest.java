@@ -3,6 +3,7 @@ package com.example.holyquran.Utils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.holyquran.Activities.IndexActivity;
 import com.example.holyquran.Activities.ResultActivity;
 import com.example.holyquran.Quran;
 
@@ -58,12 +59,6 @@ public class NetworkRequest {
         return list;
     }
 
-
-    public static List<Quran> getVersesListByPages(String JSON){
-        List<Quran> list=new ArrayList<>();
-
-        return list;
-    }
     public static List<Quran> getChaptersFromJSON(String JSON){
         List<Quran> list=new ArrayList<>();
 
@@ -72,9 +67,14 @@ public class NetworkRequest {
 
             JSONArray chaptersArray=rootObject.getJSONArray("chapters");
 
+
             for(int i=0;i<chaptersArray.length();i++)
+            {
                 list.add(new Quran(null,null,chaptersArray.getJSONObject(i).getString("name_complex")+
                         "\t("+chaptersArray.getJSONObject(i).getJSONObject("translated_name").getString("name")+")",null));
+
+                IndexActivity.versesCount[i]= Integer.parseInt(chaptersArray.getJSONObject(i).getString("verses_count"));
+            }
 
             System.out.println(list);
         } catch (JSONException e) {

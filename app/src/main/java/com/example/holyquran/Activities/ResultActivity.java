@@ -36,7 +36,7 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
     ResultsAdapter resultsAdapter;
     ProgressBar progressBar;
     TextView networkTextView,pagesTextView,headerTextView,typeTextView;
-    Spinner spinner;
+    Spinner languageSpinner;
 
     List<Quran> list = new ArrayList<>();
     //urdu-158,eng-167,spanish-83,french-136,persian-135
@@ -59,7 +59,7 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
         pagesTextView=findViewById(R.id.pages_textview);
         headerTextView=findViewById(R.id.header_text_view);
         typeTextView=findViewById(R.id.type_text_view);
-
+        languageSpinner = (Spinner) findViewById(R.id.language_selector_spinner);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
@@ -131,12 +131,10 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
         hashMap.put(languages[7],31);//french
 
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,languages);
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-        spinner.setOnItemSelectedListener(this);
+        languageSpinner.setAdapter(adapter);
+        languageSpinner.setOnItemSelectedListener(this);
     }
 
 
