@@ -127,6 +127,13 @@ public class SpecificVerseActivity extends AppCompatActivity implements LoaderMa
         if(parent==chapterSpinner)
         {
             chapterSpinnerIndex=position;
+
+            verseSpinnerList=new String[versesCount[position]];
+            for(int i=0;i<versesCount[position];i++)
+                verseSpinnerList[i]=String.valueOf(i+1);
+
+            ArrayAdapter<String> verseSpinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,verseSpinnerList);
+            verseSpinner.setAdapter(verseSpinnerAdapter);
         }
         else if(parent==verseSpinner)
         {
@@ -159,8 +166,12 @@ public class SpecificVerseActivity extends AppCompatActivity implements LoaderMa
 
         chapterSpinnerList=new String[data.size()];
 
+        //Total Verses in all Chapters
+        versesCount=new int[data.size()];
+
         for(int i=0;i<data.size();i++){
             chapterSpinnerList[i]=data.get(i).getByChapter();
+            versesCount[i]=data.get(i).getVerseCount();
         }
 
 
@@ -180,12 +191,25 @@ public class SpecificVerseActivity extends AppCompatActivity implements LoaderMa
         progressBar.setVisibility(View.GONE);
 
         /*for Specific Verse type MODE*/
-        //for ChapterSelector Spinner
+
+        //For ChapterSelector Spinner
         ArrayAdapter<String> chapterSpinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,chapterSpinnerList);
         chapterSpinner.setAdapter(chapterSpinnerAdapter);
 
         chapterSpinner.setSelection(chapterSpinnerIndex);
 
+
+        //For verseSelector Spinner
+        //defined new array for verses list in current Chapter
+        verseSpinnerList=new String[versesCount[chapterSpinnerIndex]];
+
+        for(int i=0;i<versesCount[chapterSpinnerIndex];i++)
+            verseSpinnerList[i]=String.valueOf(i+1);
+
+        ArrayAdapter<String> verseSpinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,verseSpinnerList);
+        verseSpinner.setAdapter(verseSpinnerAdapter);
+
+        verseSpinner.setSelection(verseSpinnerIndex);
     }
 
     @Override

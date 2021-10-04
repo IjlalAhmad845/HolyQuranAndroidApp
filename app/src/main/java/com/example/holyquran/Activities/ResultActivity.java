@@ -131,7 +131,7 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
         hashMap.put(languages[7],31);//french
 
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        Spinner spinner = (Spinner) findViewById(R.id.language_selector_spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,languages);
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);

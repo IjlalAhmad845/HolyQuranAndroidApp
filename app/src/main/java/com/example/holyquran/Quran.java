@@ -5,14 +5,23 @@ public class Quran {
     String Translation;
     String ByChapter;
     String ByPages;
+    int VerseCount;
 
-    public Quran(String arabic, String translation, String byChapter, String byPages) {
+    public Quran(String arabic, String translation, String byChapter, String byPages,int verseCount) {
         Arabic = arabic;
         Translation = translation;
         ByChapter = byChapter;
         ByPages = byPages;
+        VerseCount=verseCount;
     }
 
+    public int getVerseCount() {
+        return VerseCount;
+    }
+
+    public void setVerseCount(int verseCount) {
+        VerseCount = verseCount;
+    }
     public String getByPages() {
         return ByPages;
     }
