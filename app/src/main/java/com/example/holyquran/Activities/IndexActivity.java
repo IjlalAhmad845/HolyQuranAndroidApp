@@ -41,6 +41,7 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
     public static String ByJuz="by_juz/";
 
 
+    //All in one list for incoming data
     List<String> indexList=new ArrayList<>();
 
     public static final int INDEX_LOADER_ID=100;
