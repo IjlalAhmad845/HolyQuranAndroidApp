@@ -53,6 +53,7 @@ public class SpecificVerseActivity extends AppCompatActivity implements LoaderMa
     int chapterSpinnerIndex=0,verseSpinnerIndex=0;
     public static int[] versesCount;
 
+    public static final int SPECIFIC_VERSE_LOADER=102;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

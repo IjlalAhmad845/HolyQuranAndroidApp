@@ -37,7 +37,10 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
+        if(list.size()!=1)
         holder.textView.setText(50*(ResultActivity.CURRENT_PAGE-1)+(position+1)+")");
+        else
+            holder.textView.setVisibility(View.GONE);
         holder.verse.setText(list.get(position).getTranslation());
         holder.arabic.setText(list.get(position).getArabic());
     }

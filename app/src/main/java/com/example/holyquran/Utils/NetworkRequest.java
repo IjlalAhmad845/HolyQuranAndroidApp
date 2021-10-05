@@ -58,12 +58,10 @@ public class NetworkRequest {
         return list;
     }
 
-
-    public static List<Quran> getVersesListByPages(String JSON){
-        List<Quran> list=new ArrayList<>();
-
-        return list;
+    public static String fixHindiTranslation(String translation){
+        return translation.substring(0,translation.indexOf("<"))+translation.substring(translation.lastIndexOf(">")+1);
     }
+
     public static List<Quran> getChaptersFromJSON(String JSON){
         List<Quran> list=new ArrayList<>();
 
@@ -88,7 +86,42 @@ public class NetworkRequest {
         return list;
     }
 
-    public static String fixHindiTranslation(String translation){
-        return translation.substring(0,translation.indexOf("<"))+translation.substring(translation.lastIndexOf(">")+1);
+    public static List<Quran> getSpecificVerseFromJSON(String JSON){
+        List<Quran> list=new ArrayList<>();
+
+        StringBuilder verseTranslation,arabic;
+        try {
+            JSONObject rootObject=new JSONObject(JSON);
+            JSONObject verse=rootObject.getJSONObject("verse");
+
+            ResultActivity.TOTAL_RECORDS =1;
+            ResultActivity.CURRENT_PAGE=1;
+
+            verseTranslation=new StringBuilder();
+            arabic=new StringBuilder();
+            verseTranslation.append(verse.getJSONArray("translations").getJSONObject(0).getString("text"));
+
+            JSONArray words=verse.getJSONArray("words");
+
+            for(int i=0;i<words.length();i++){
+                arabic.append(words.getJSONObject(i).getJSONObject("transliteration").getString("text"));
+                arabic.append(" ");
+            }
+
+            String language=verse.getJSONArray("translations").getJSONObject(0).getString("resource_id");
+
+            if(language.equals("122") && verseTranslation.toString().contains("<")){
+                language=fixHindiTranslation(verseTranslation.toString());
+                list.add(new Quran(arabic.toString(),language,null,null,0));
+            }
+            else
+                list.add(new Quran(arabic.toString(),verseTranslation.toString(),null,null,0));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return list;
     }
+
 }

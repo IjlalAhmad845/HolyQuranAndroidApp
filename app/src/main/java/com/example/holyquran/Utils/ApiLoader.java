@@ -9,6 +9,7 @@ import androidx.loader.content.AsyncTaskLoader;
 import com.example.holyquran.Activities.IndexActivity;
 import com.example.holyquran.Activities.ResultActivity;
 import com.example.holyquran.Quran;
+import com.example.holyquran.SpecificVerseActivity;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -87,6 +88,8 @@ public class ApiLoader extends AsyncTaskLoader<List<Quran>> {
         list = NetworkRequest.getVersesListByChapter(JSONResponse.toString());
        else if(loaderID== IndexActivity.INDEX_LOADER_ID)
            list = NetworkRequest.getChaptersFromJSON(JSONResponse.toString());
+       else if(loaderID== SpecificVerseActivity.SPECIFIC_VERSE_LOADER)
+           list=NetworkRequest.getSpecificVerseFromJSON(JSONResponse.toString());
         return list;
     }
 }

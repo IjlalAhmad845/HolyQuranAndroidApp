@@ -108,13 +108,22 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
         receivingTYPE=intent.getStringExtra("URLType");
 
         if(receivingTYPE.equals(IndexActivity.ByChapter) || receivingTYPE.equals(IndexActivity.ByPages) || receivingTYPE.equals(IndexActivity.ByJuz))
+        {
             //Building URL based Upon type and Position Clicked
             url=url.substring(0,url.indexOf("verses")+7)+receivingTYPE+intent.getStringExtra("ListPosition")+url.substring(url.indexOf("?"));
+
+            getSupportLoaderManager().initLoader(RESULT_LOADER_ID, null, this).forceLoad();
+        }
+
         else if(receivingTYPE.equals(SpecificVerseActivity.ByVerse))
+        {
             url=url.substring(0,url.indexOf("verses")+7)+receivingTYPE+intent.getStringExtra("ListPosition")+":"+
                     intent.getStringExtra("ListClickedValue")+url.substring(url.indexOf("?"));
+
+            getSupportLoaderManager().initLoader(SpecificVerseActivity.SPECIFIC_VERSE_LOADER, null, this).forceLoad();
+        }
         System.out.println(url);
-        //getSupportLoaderManager().initLoader(RESULT_LOADER_ID, null, this).forceLoad();
+        //
     }
 
     public void NextPage(View v){
@@ -159,10 +168,15 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         if(receivingTYPE.equals(IndexActivity.ByChapter) || receivingTYPE.equals(IndexActivity.ByPages) || receivingTYPE.equals(IndexActivity.ByJuz))
+        {
             url=url.substring(0,url.indexOf("translations")+13)+hashMap.get(languages[position])+url.substring(url.indexOf("&page"));
+            getSupportLoaderManager().restartLoader(RESULT_LOADER_ID, null, this).forceLoad();
+        }
         else
+        {
             url=url.substring(0,url.indexOf("translations")+13)+hashMap.get(languages[position]);
-        //getSupportLoaderManager().restartLoader(RESULT_LOADER_ID, null, this).forceLoad();
+        }
+        getSupportLoaderManager().restartLoader(SpecificVerseActivity.SPECIFIC_VERSE_LOADER, null, this).forceLoad();
     }
 
     @Override
@@ -182,7 +196,7 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
         list.clear();
         resultsAdapter.notifyDataSetChanged();
 
-        if (id == RESULT_LOADER_ID)
+        if (id == RESULT_LOADER_ID || id==SpecificVerseActivity.SPECIFIC_VERSE_LOADER)
             return new ApiLoader(this, url, id);
         else
             return new ApiLoader(this, "", 0);
