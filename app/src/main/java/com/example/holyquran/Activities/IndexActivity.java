@@ -33,7 +33,7 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
     ProgressBar progressBar;
 
 
-    public static final String BASE_URL="https://api.quran.com/api/v4/verses/?language=en&words=true&translations=167&page=1&per_page=50";
+    public static final String BASE_URL="https://api.quran.com/api/v4/verses/?language=en&words=true&translations=84&page=1&per_page=50";
     public static String ChaptersURL="https://api.quran.com/api/v4/chapters?language=en";
 
     public static String ByChapter="by_chapter/";

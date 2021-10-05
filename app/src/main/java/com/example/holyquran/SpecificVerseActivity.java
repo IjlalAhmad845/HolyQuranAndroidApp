@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.example.holyquran.Activities.IndexActivity;
 import com.example.holyquran.Activities.MainActivity;
+import com.example.holyquran.Activities.ResultActivity;
 import com.example.holyquran.Adapters.IndexAdapter;
 import com.example.holyquran.Utils.ApiLoader;
 
@@ -41,6 +42,9 @@ public class SpecificVerseActivity extends AppCompatActivity implements LoaderMa
     Button getVerseButton;
 
     ProgressBar progressBar;
+
+    public static final String BASE_URL="https://api.quran.com/api/v4/verses/?language=en&words=true&translations=84";
+    public static final String ByVerse="by_key/";
 
     List<String> indexList=new ArrayList<>();
 
@@ -72,6 +76,9 @@ public class SpecificVerseActivity extends AppCompatActivity implements LoaderMa
         Intent intent=getIntent();
 
         headerTextView.setText(intent.getStringExtra(MainActivity.INDEX_KEYS));
+
+        //initializing type when this activity is opened instead of IndexActivity
+        IndexActivity.type=intent.getStringExtra(MainActivity.INDEX_KEYS);
 
         initUIElements();
     }
@@ -220,5 +227,16 @@ public class SpecificVerseActivity extends AppCompatActivity implements LoaderMa
     @Override
     public void onClick(int position, String listClickedValue) {
 
+        Intent intent=new Intent(SpecificVerseActivity.this, ResultActivity.class);
+        intent.putExtra("ListPosition",position+1+"");
+
+        intent.putExtra("URLType",ByVerse);
+
+        intent.putExtra("BASEUrl",BASE_URL);
+        intent.putExtra("ListClickedValue",listClickedValue);
+        intent.putExtra("AdapterClickedIndex",String.valueOf(position+1));
+
+        startActivity(intent);
     }
+
 }
