@@ -9,7 +9,7 @@ import androidx.loader.content.AsyncTaskLoader;
 import com.example.holyquran.Activities.IndexActivity;
 import com.example.holyquran.Activities.ResultActivity;
 import com.example.holyquran.Quran;
-import com.example.holyquran.SpecificVerseActivity;
+import com.example.holyquran.Activities.SpecificVerseActivity;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SpecificVerseActivity">
+    tools:context=".Activities.SpecificVerseActivity">
 
     <TextView
         android:id="@+id/specific_verse_heading"
@@ -69,7 +69,8 @@
                 android:id="@+id/chapter_selector_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:foreground="?attr/selectableItemBackground"/>
         </LinearLayout>
 
@@ -90,14 +91,18 @@
                 android:id="@+id/verse_selector_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:foreground="?attr/selectableItemBackground"/>
         </LinearLayout>
 
         <Button
             android:id="@+id/get_verse_button"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:text="Get"
+
+            android:layout_gravity="center"
             android:layout_margin="4dp"
             android:backgroundTint="@color/cardview_dark_background"/>
     </LinearLayout>

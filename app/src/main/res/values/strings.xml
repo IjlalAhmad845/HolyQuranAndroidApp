@@ -7,4 +7,6 @@
     <string name="SpecificVerse">Specific Verse</string>
 
     <string name="the_holy_quran">the holy quran</string>
+    <string name="offlineNetwork">No Internet Available</string>
+    <string name="timeout">Connection Timeout</string>
 </resources>

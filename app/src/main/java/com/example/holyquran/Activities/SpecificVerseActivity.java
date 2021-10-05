@@ -1,10 +1,4 @@
-package com.example.holyquran;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
+package com.example.holyquran.Activities;
 
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -20,10 +14,14 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.holyquran.Activities.IndexActivity;
-import com.example.holyquran.Activities.MainActivity;
-import com.example.holyquran.Activities.ResultActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import com.example.holyquran.Adapters.IndexAdapter;
+import com.example.holyquran.Quran;
+import com.example.holyquran.R;
 import com.example.holyquran.Utils.ApiLoader;
 
 import java.util.ArrayList;
@@ -46,10 +44,12 @@ public class SpecificVerseActivity extends AppCompatActivity implements LoaderMa
     public static final String BASE_URL="https://api.quran.com/api/v4/verses/?language=en&words=true&translations=84";
     public static final String ByVerse="by_key/";
 
-    List<String> indexList=new ArrayList<>();
+    ArrayAdapter<String> chapterSpinnerAdapter,verseSpinnerAdapter;
 
-    //for specific verse type MODE
-    String[] chapterSpinnerList,verseSpinnerList;
+    //List of permanent storage for Chapter Names
+    List<String> chaptersList=new ArrayList<>();
+
+    String[] chapterSpinnerArray, verseSpinnerArray;
     int chapterSpinnerIndex=0,verseSpinnerIndex=0;
     public static int[] versesCount;
 
@@ -86,14 +86,11 @@ public class SpecificVerseActivity extends AppCompatActivity implements LoaderMa
 
     public void hideUIContents(){
         specificVerseLayout.setVisibility(View.GONE);
-
         networkTextView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.VISIBLE);
     }
 
     public void initUIElements(){
-        specificVerseLayout.setVisibility(View.VISIBLE);
-
 
         nameRadio.setOnClickListener(this);
         numberRadio.setOnClickListener(this);
@@ -110,19 +107,25 @@ public class SpecificVerseActivity extends AppCompatActivity implements LoaderMa
     @Override
     public void onClick(View v) {
 
-
         if(v==nameRadio){
-            //recursion for resetting spinner
-            initUIElements();
+
+            for(int i = 0; i< chaptersList.size(); i++)
+                chapterSpinnerArray[i]=chaptersList.get(i);
+
+            chapterSpinnerAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, chapterSpinnerArray);
+            chapterSpinner.setAdapter(chapterSpinnerAdapter);
+            chapterSpinner.setSelection(chapterSpinnerIndex);
+
         }
         else if(v==numberRadio){
-            for(int i=0;i<chapterSpinnerList.length;i++)
-                chapterSpinnerList[i]="Chapter (Surah) - "+(i+1);
 
-            ArrayAdapter<String> adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1,chapterSpinnerList);
-            chapterSpinner.setAdapter(adapter);
+           for(int i = 0; i< chaptersList.size(); i++)
+                chapterSpinnerArray[i]="Chapter (Surah) - "+(i+1);
 
+            chapterSpinnerAdapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, chapterSpinnerArray);
+            chapterSpinner.setAdapter(chapterSpinnerAdapter);
             chapterSpinner.setSelection(chapterSpinnerIndex);
+
         }
         else if(v==getVerseButton)
             onClick(chapterSpinnerIndex,String.valueOf(verseSpinnerIndex+1));
@@ -136,11 +139,12 @@ public class SpecificVerseActivity extends AppCompatActivity implements LoaderMa
         {
             chapterSpinnerIndex=position;
 
-            verseSpinnerList=new String[versesCount[position]];
+            verseSpinnerArray =new String[versesCount[position]];
             for(int i=0;i<versesCount[position];i++)
-                verseSpinnerList[i]=String.valueOf(i+1);
+                verseSpinnerArray[i]=String.valueOf(i+1);
 
-            ArrayAdapter<String> verseSpinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,verseSpinnerList);
+            verseSpinnerAdapter=null;
+            verseSpinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, verseSpinnerArray);
             verseSpinner.setAdapter(verseSpinnerAdapter);
         }
         else if(parent==verseSpinner)
@@ -172,13 +176,12 @@ public class SpecificVerseActivity extends AppCompatActivity implements LoaderMa
     public void onLoadFinished(@NonNull Loader<List<Quran>> loader, List<Quran> data) {
         specificVerseLayout.setVisibility(View.VISIBLE);
 
-        chapterSpinnerList=new String[data.size()];
-
+        chaptersList.clear();
         //Total Verses in all Chapters
         versesCount=new int[data.size()];
 
         for(int i=0;i<data.size();i++){
-            chapterSpinnerList[i]=data.get(i).getByChapter();
+            chaptersList.add(data.get(i).getByChapter());
             versesCount[i]=data.get(i).getVerseCount();
         }
 
@@ -189,40 +192,54 @@ public class SpecificVerseActivity extends AppCompatActivity implements LoaderMa
 
         if(!isConnected)
         {
-            networkTextView.setText("No Internet Available");
+            networkTextView.setText(R.string.offlineNetwork);
             hideUIContents();
         }
-        else
+        else if(data.size()==0)
         {
-            networkTextView.setVisibility(View.GONE);
+            networkTextView.setText(R.string.timeout);
+            specificVerseLayout.setVisibility(View.GONE);
         }
+        else
+            networkTextView.setVisibility(View.GONE);
+
+        if(data.size()==0)
+        {
+            networkTextView.setText(R.string.timeout);
+            specificVerseLayout.setVisibility(View.GONE);
+        }
+
         progressBar.setVisibility(View.GONE);
 
-        /*for Specific Verse type MODE*/
+        /*For ChapterSelector Spinner*/
+        chapterSpinnerArray = new String[chaptersList.size()];
+        chapterSpinnerArray=chaptersList.toArray(chapterSpinnerArray);
 
-        //For ChapterSelector Spinner
-        ArrayAdapter<String> chapterSpinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,chapterSpinnerList);
+        chapterSpinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, chapterSpinnerArray);
         chapterSpinner.setAdapter(chapterSpinnerAdapter);
 
         chapterSpinner.setSelection(chapterSpinnerIndex);
 
+        /*For verseSelector Spinner*/
 
-        //For verseSelector Spinner
-        //defined new array for verses list in current Chapter
-        verseSpinnerList=new String[versesCount[chapterSpinnerIndex]];
+        if(data.size()!=0){
+            //defined new array for verses list in current Chapter
+            verseSpinnerArray =new String[versesCount[chapterSpinnerIndex]];
 
-        for(int i=0;i<versesCount[chapterSpinnerIndex];i++)
-            verseSpinnerList[i]=String.valueOf(i+1);
+            for(int i=0;i<versesCount[chapterSpinnerIndex];i++)
+                verseSpinnerArray[i]=String.valueOf(i+1);
 
-        ArrayAdapter<String> verseSpinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,verseSpinnerList);
-        verseSpinner.setAdapter(verseSpinnerAdapter);
+            verseSpinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, verseSpinnerArray);
+            verseSpinner.setAdapter(verseSpinnerAdapter);
+            verseSpinner.setSelection(verseSpinnerIndex);
+        }
 
-        verseSpinner.setSelection(verseSpinnerIndex);
     }
 
     @Override
     public void onLoaderReset(@NonNull Loader<List<Quran>> loader) {
-
+            chapterSpinnerAdapter=new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, (Object[]) null);
+            verseSpinnerAdapter=new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1, (Object[]) null);
     }
 
     @Override

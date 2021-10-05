@@ -1,5 +1,12 @@
 package com.example.holyquran.Activities;
 
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,26 +15,10 @@ import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.Spinner;
-import android.widget.TextView;
-
 import com.example.holyquran.Adapters.IndexAdapter;
 import com.example.holyquran.Quran;
 import com.example.holyquran.R;
 import com.example.holyquran.Utils.ApiLoader;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,15 +30,12 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
     ProgressBar progressBar;
 
 
-
-
-
     public static final String BASE_URL="https://api.quran.com/api/v4/verses/?language=en&words=true&translations=84&page=1&per_page=50";
-    public static String ChaptersURL="https://api.quran.com/api/v4/chapters?language=en";
+    public static final String ChaptersURL="https://api.quran.com/api/v4/chapters?language=en";
 
-    public static String ByChapter="by_chapter/";
-    public static String ByPages="by_page/";
-    public static String ByJuz="by_juz/";
+    public static final String ByChapter="by_chapter/";
+    public static final String ByPages="by_page/";
+    public static final String ByJuz="by_juz/";
 
 
     //All in one list for incoming data
@@ -170,8 +158,12 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
 
         if(!isConnected)
             networkTextView.setText("No Internet Available");
+        else if(data.size()==0)
+            networkTextView.setText(R.string.timeout);
         else
             networkTextView.setVisibility(View.GONE);
+
+
 
         progressBar.setVisibility(View.GONE);
 

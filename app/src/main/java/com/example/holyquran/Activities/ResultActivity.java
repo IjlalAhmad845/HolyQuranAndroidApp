@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.holyquran.Adapters.ResultsAdapter;
 import com.example.holyquran.Quran;
 import com.example.holyquran.R;
-import com.example.holyquran.SpecificVerseActivity;
 import com.example.holyquran.Utils.ApiLoader;
 
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
     Spinner languageSpinner;
 
     List<Quran> list = new ArrayList<>();
-    //urdu-158,eng-167,spanish-83,french-136,persian-135
+
     public static HashMap<String,Integer> hashMap=new HashMap<>();
     String[] languages=new String[]{"English","Urdu","Hindi","Persian","Spanish","Italian","Russian","French"};
 
@@ -61,7 +60,7 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
         pagesTextView=findViewById(R.id.pages_textview);
         headerTextView=findViewById(R.id.header_text_view);
         typeTextView=findViewById(R.id.type_text_view);
-        languageSpinner = (Spinner) findViewById(R.id.language_selector_spinner);
+        languageSpinner = findViewById(R.id.language_selector_spinner);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -73,6 +72,7 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
 
         Intent intent=getIntent();
         typeTextView.setText(intent.getStringExtra("AdapterClickedIndex"));
+
         //conditions for settings type text view for Content Range
         switch (IndexActivity.type){
             case "Chapters":
@@ -111,19 +111,19 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
         {
             //Building URL based Upon type and Position Clicked
             url=url.substring(0,url.indexOf("verses")+7)+receivingTYPE+intent.getStringExtra("ListPosition")+url.substring(url.indexOf("?"));
-
             getSupportLoaderManager().initLoader(RESULT_LOADER_ID, null, this).forceLoad();
+
         }
 
         else if(receivingTYPE.equals(SpecificVerseActivity.ByVerse))
         {
             url=url.substring(0,url.indexOf("verses")+7)+receivingTYPE+intent.getStringExtra("ListPosition")+":"+
                     intent.getStringExtra("ListClickedValue")+url.substring(url.indexOf("?"));
-
             getSupportLoaderManager().initLoader(SpecificVerseActivity.SPECIFIC_VERSE_LOADER, null, this).forceLoad();
+
         }
         System.out.println(url);
-        //
+
     }
 
     public void NextPage(View v){
@@ -215,7 +215,9 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
         if(!isConnected)
-            networkTextView.setText("No Internet Available");
+            networkTextView.setText(getResources().getString(R.string.offlineNetwork));
+        else if(data.size()==0)
+            networkTextView.setText(R.string.timeout);
         else{
             networkTextView.setVisibility(View.GONE);
             pagesTextView.setText(CURRENT_PAGE+"/"+TOTAL_RECORDS);
@@ -223,7 +225,6 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
 
         progressBar.setVisibility(View.GONE);
 
-        progressBar.setVisibility(View.GONE);
     }
 
     @Override

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.holyquran.R;
-import com.example.holyquran.SpecificVerseActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       // startActivity(new Intent(MainActivity.this,ResultActivity.class));
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
     }
 
