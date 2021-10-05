@@ -172,11 +172,12 @@ public class ResultActivity extends AppCompatActivity implements LoaderManager.L
             url=url.substring(0,url.indexOf("translations")+13)+hashMap.get(languages[position])+url.substring(url.indexOf("&page"));
             getSupportLoaderManager().restartLoader(RESULT_LOADER_ID, null, this).forceLoad();
         }
-        else
+        else if(receivingTYPE.equals(SpecificVerseActivity.ByVerse))
         {
             url=url.substring(0,url.indexOf("translations")+13)+hashMap.get(languages[position]);
+            getSupportLoaderManager().restartLoader(SpecificVerseActivity.SPECIFIC_VERSE_LOADER, null, this).forceLoad();
         }
-        getSupportLoaderManager().restartLoader(SpecificVerseActivity.SPECIFIC_VERSE_LOADER, null, this).forceLoad();
+
     }
 
     @Override

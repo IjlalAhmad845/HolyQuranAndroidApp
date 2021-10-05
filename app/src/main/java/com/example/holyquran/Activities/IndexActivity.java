@@ -31,20 +31,14 @@ import com.example.holyquran.Utils.ApiLoader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IndexActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Quran>>,IndexAdapter.indexItemOnClick,
-        AdapterView.OnItemSelectedListener,
-        View.OnClickListener {
+public class IndexActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Quran>>,IndexAdapter.indexItemOnClick {
 
     TextView headerTextView,networkTextView;
     RecyclerView recyclerView;
     IndexAdapter indexAdapter;
     ProgressBar progressBar;
 
-    //for specific verse type MODE
-    LinearLayout specificVerseLayout;
-    Spinner chapterSpinner,verseSpinner;
-    RadioButton nameRadio, numberRadio;
-    Button getVerseButton;
+
 
 
 
@@ -54,17 +48,10 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
     public static String ByChapter="by_chapter/";
     public static String ByPages="by_page/";
     public static String ByJuz="by_juz/";
-    public static String ByKey="by_key/";
 
 
     //All in one list for incoming data
     List<String> indexList=new ArrayList<>();
-
-    //for specific verse type MODE
-    String[] chapterSpinnerList,verseSpinnerList;
-    int chapterSpinnerIndex=0,verseSpinnerIndex=0;
-    public static int[] versesCount;
-
 
     public static final int INDEX_LOADER_ID=100;
 
@@ -78,15 +65,6 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
         networkTextView=findViewById(R.id.index_network_message);
         recyclerView=findViewById(R.id.index_recyclerView);
         progressBar=findViewById(R.id.index_progressBar);
-
-        //for specific verse type MODE
-        specificVerseLayout=findViewById(R.id.specific_verse_layout);
-        chapterSpinner=findViewById(R.id.chapter_selector_spinner);
-        verseSpinner=findViewById(R.id.verse_selector_spinner);
-        nameRadio =findViewById(R.id.by_name_radio);
-        numberRadio =findViewById(R.id.by_number_radio);
-        nameRadio.setChecked(true);
-        getVerseButton=findViewById(R.id.get_verse_button);
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -107,7 +85,6 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
         switch (type) {
             case "Juz":
                 indexList.clear();
-                verseByTypeMode();
 
                 indexList.add("Alīf-Lām-Mīm");
                 indexList.add("Sayaqūlu");
@@ -148,7 +125,6 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
                 break;
             case "Pages":
                 indexList.clear();
-                verseByTypeMode();
 
                 for (int i = 1; i <= 604; i++)
                     indexList.add("Page No. - " + i);
@@ -159,94 +135,18 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
                 progressBar.setVisibility(View.GONE);
                 break;
             case "Chapters":
-                verseByTypeMode();
 
                 getSupportLoaderManager().initLoader(INDEX_LOADER_ID, null, this).forceLoad();
                 break;
 
-            case "Specific Verse":
-                specificVerseMode();
-                break;
         }
     }
 
-    public void verseByTypeMode(){
-        specificVerseLayout.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.VISIBLE);
-        networkTextView.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    public void specificVerseMode(){
-        specificVerseLayout.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.GONE);
-
-        nameRadio.setOnClickListener(this);
-        numberRadio.setOnClickListener(this);
-        getVerseButton.setOnClickListener(this);
-
-        getSupportLoaderManager().initLoader(INDEX_LOADER_ID, null, this).forceLoad();
-
-        chapterSpinner.setOnItemSelectedListener(this);
-        verseSpinner.setOnItemSelectedListener(this);
-
-    }
-
-
-
-    @Override
-    public void onClick(View v) {
-
-        if(v==nameRadio){
-            //recursion for resetting spinner
-            specificVerseMode();
-        }
-        else if(v==numberRadio){
-            for(int i=0;i<indexList.size();i++)
-                chapterSpinnerList[i]="Chapter (Surah) - "+(i+1);
-
-            ArrayAdapter<String> adapter = new ArrayAdapter(getApplicationContext(), android.R.layout.simple_list_item_1,chapterSpinnerList);
-            chapterSpinner.setAdapter(adapter);
-
-            chapterSpinner.setSelection(chapterSpinnerIndex);
-        }
-        else if(v==getVerseButton)
-        onClick(chapterSpinnerIndex,String.valueOf(verseSpinnerIndex+1));
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-        if(parent==chapterSpinner)
-        {
-            chapterSpinnerIndex=position;
-
-            verseSpinnerList=new String[versesCount[position]];
-              for(int i=0;i<versesCount[position];i++)
-                verseSpinnerList[i]=String.valueOf(i+1);
-
-            ArrayAdapter<String> verseSpinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,verseSpinnerList);
-            verseSpinner.setAdapter(verseSpinnerAdapter);
-
-        }
-        else if(parent==verseSpinner)
-        {
-            verseSpinnerIndex=position;
-
-
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
 
     /**=========================================== LOADER METHODS =====================================================**/
     @NonNull
     @Override
     public Loader<List<Quran>> onCreateLoader(int id, @Nullable Bundle args) {
-        verseByTypeMode();
 
         if(id==INDEX_LOADER_ID)
             return new ApiLoader(this,ChaptersURL,id);
@@ -257,55 +157,23 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
 
     @Override
     public void onLoadFinished(@NonNull Loader<List<Quran>> loader, List<Quran> data) {
-        specificVerseLayout.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.GONE);
-
         indexList.clear();
-        chapterSpinnerList=new String[data.size()];
-        versesCount=new int[data.size()];
 
         for(int i=0;i<data.size();i++){
             indexList.add(data.get(i).getByChapter());
-            chapterSpinnerList[i]=data.get(i).getByChapter();
-            versesCount[i]=data.get(i).getVerseCount();
         }
-
         indexAdapter.notifyDataSetChanged();
-
 
         ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
         if(!isConnected)
-        {
             networkTextView.setText("No Internet Available");
-            verseByTypeMode();
-        }
         else
-        {
             networkTextView.setVisibility(View.GONE);
-        }
+
         progressBar.setVisibility(View.GONE);
-
-
-        /*for Specific Verse type MODE*/
-        //for ChapterSelector Spinner
-        ArrayAdapter<String> chapterSpinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,chapterSpinnerList);
-        chapterSpinner.setAdapter(chapterSpinnerAdapter);
-
-        chapterSpinner.setSelection(chapterSpinnerIndex);
-
-
-        //for verseSelector Spinner
-        verseSpinnerList=new String[versesCount[chapterSpinnerIndex]];
-        for(int i=0;i<versesCount[chapterSpinnerIndex];i++)
-            verseSpinnerList[i]=String.valueOf(i+1);
-
-        ArrayAdapter<String> verseSpinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,verseSpinnerList);
-        verseSpinner.setAdapter(verseSpinnerAdapter);
-
-        verseSpinner.setSelection(verseSpinnerIndex);
 
     }
 
@@ -330,9 +198,6 @@ public class IndexActivity extends AppCompatActivity implements LoaderManager.Lo
                 break;
             case "Juz":
                 intent.putExtra("URLType",ByJuz);
-                break;
-            case "Specific Verse":
-                intent.putExtra("URLType",ByKey);
                 break;
         }
         intent.putExtra("BASEUrl",BASE_URL);
